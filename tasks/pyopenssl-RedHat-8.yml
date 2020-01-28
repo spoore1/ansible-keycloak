@@ -1,0 +1,4 @@
+---
+- name: Set pyOpenSSL package name
+  set_fact:
+    keycloak_dep_pyOpenSSL: "python3-pyOpenSSL"

@@ -118,9 +118,9 @@
       args:
         argv:
           - "{{ keycloak_jboss_home }}/bin/add-user-keycloak.sh"
-          - -rmaster
-          - -u{{ keycloak_admin_user }}
-          - -p{{ keycloak_admin_password }}
+          - --realm=master
+          - --user={{ keycloak_admin_user }}
+          - --password={{ keycloak_admin_password }}
         creates: "{{ keycloak_config_dir }}/keycloak-add-user.json"
       become: yes
       tags:
@@ -292,6 +292,10 @@
             - restart keycloak
           tags:
             - skip_ansible_lint
+          retries: 5
+          delay: 5
+          register: result
+          until: result.rc == 0
         - name: clean up jboss-cli-sh command file
           file:
             path: "{{ keycloak_config_dir }}/standalone-tls-config.cli"
